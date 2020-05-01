@@ -32,10 +32,12 @@ nginx_version=$($build_dir/bin/nginx-$STACK -V 2>&1 | head -1 | awk '{ print $NF
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
 echo "-----> Installed ${nginx_version} to /app/bin"
 
-echo "Downloading $set_misc_tarball_url"
-(cd nginx-${nginx_version} && curl -L $set_misc_tarball_url | tar xvz )
+echo "Downloading $misc_tarball_url"
+(cd nginx-${nginx_version} && curl -L $misc_tarball_url | tar xvz )
 
 (
+    echo "Configuring nginx with set-misc-nginx-module ${misc_version}"
+
 	cd nginx-${nginx_version}
 	./configure \
 		--prefix=/tmp/nginx \
