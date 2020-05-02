@@ -80,23 +80,7 @@ echo "Downloading $headers_more_module_url"
   make install
 )
 
-pwd
-ls -la
-
-cd nginx-${NGINX_VERSION}
-
-pwd
-ls -la
-
-cd /tmp/nginx
-pwd
-ls -la
-
-cd /tmp/nginx/sbin
-pwd
-ls -la
-
-mv nginx-${NGINX_VERSION}/nginx $build_dir/bin/nginx
+ln -s /tmp/nginx/sbin/nginx $build_dir/bin/nginx
 
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
 
