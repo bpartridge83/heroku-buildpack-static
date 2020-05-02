@@ -80,13 +80,15 @@ echo "Downloading $headers_more_module_url"
   make install
 )
 
-which nginx
-
 pwd
 ls -la
 
 cd nginx-${NGINX_VERSION}
 
+pwd
+ls -la
+
+cd /tmp/nginx
 pwd
 ls -la
 
