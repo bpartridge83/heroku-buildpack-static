@@ -85,7 +85,8 @@ ls -la
 
 cd nginx-${NGINX_VERSION}
 
-pwd ls -la
+pwd
+ls -la
 
 mv nginx-${NGINX_VERSION}/nginx $build_dir/bin/nginx
 
