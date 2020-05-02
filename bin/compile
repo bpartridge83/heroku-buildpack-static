@@ -7,7 +7,6 @@ build_dir=$1
 cache_dir=$2
 env_dir=$3
 bp_dir=$(dirname $(dirname $0))
-misc_version=0.28
 
 fetch_nginx_tarball() {
     local version="1.9.7"
@@ -15,8 +14,6 @@ fetch_nginx_tarball() {
     local stack="cedar-14"
     local nginx_tarball_url="https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/nginx/$stack/nginx-$version-ngx_mruby.tgz"
     local dest_path="$cache_dir/$stack/$tarball_file"
-
-    local misc_tarball_url="https://github.com/openresty/set-misc-nginx-module/archive/v${misc_version}.tar.gz"
 
     if [ -f "$dest_path" ]; then
         echo -n "cat $dest_path"
@@ -27,25 +24,9 @@ fetch_nginx_tarball() {
 
 mkdir -p $build_dir/bin
 $(fetch_nginx_tarball) | tar xzC $build_dir/bin
-nginx_version=$($build_dir/bin/nginx-$STACK -V | grep -o '[0-9.]*$')
-
+nginx_version=$($build_dir/bin/nginx-$STACK -V 2>&1 | head -1 | awk '{ print $NF }')
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
-echo "-----> Installed ${nginx_version} to ${build_dir}/bin"
-
-echo "Downloading $misc_tarball_url"
-(cd nginx-${nginx_version} && curl -L $misc_tarball_url | tar xvz )
-
-(
-    echo "Configuring nginx with set-misc-nginx-module ${misc_version}"
-
-	cd nginx-${nginx_version}
-	./configure \
-		--prefix=/tmp/nginx \
-		--with-http_{auth_request,ssl}_module \
-		--add-module=set-misc-nginx-module-${misc_version}
-
-	make install
-)
+echo "-----> Installed ${nginx_version} to /app/bin"
 
 mkdir -p $build_dir/config
 cp $bp_dir/scripts/config/templates/mime.types $build_dir/config
