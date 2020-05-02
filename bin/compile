@@ -12,8 +12,8 @@
 
 set -e
 
-NGINX_VERSION=${NGINX_VERSION-1.13.11}
-PCRE_VERSION=${PCRE_VERSION-8.42}
+NGINX_VERSION=${NGINX_VERSION-1.17.10}
+PCRE_VERSION=${PCRE_VERSION-8.44}
 ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
 NGX_DEVEL_KIT_VERSION=${NGX_DEVEL_KIT_VERSION-0.3.0}
 SET_MISC_MODULE_VERSION=${SET_MISC_MODULE_VERSION-0.32}
@@ -71,3 +71,12 @@ echo "Downloading $headers_more_module_url"
     --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,--as-needed'
   make install
 )
+
+cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
+
+mkdir -p $build_dir/config
+cp $bp_dir/scripts/config/templates/mime.types $build_dir/config
+
+mkdir -p $build_dir/logs
+
+exit 0
