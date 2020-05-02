@@ -28,6 +28,32 @@ nginx_version=$($build_dir/bin/nginx-$STACK -V 2>&1 | head -1 | awk '{ print $NF
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
 echo "-----> Installed ${nginx_version} to /app/bin"
 
+which nginx
+
+echo nginx_version
+
+PCRE_VERSION=${PCRE_VERSION-8.21}
+SET_MISC_VERSION=${SET_MISC_VERSION-0.28}
+NGINX_VERSION=${NGINX_VERSION-1.9.7}
+set_misc_tarball_url=https://github.com/openresty/set-misc-nginx-module/archive/v${SET_MISC_VERSION}.tar.gz
+
+echo "Downloading $pcre_tarball_url"
+(cd nginx-${NGINX_VERSION} && curl -L $pcre_tarball_url | tar xvj )
+
+echo "Downloading $set_misc_tarball_url"
+(cd nginx-${NGINX_VERSION} && curl -L $set_misc_tarball_url | tar xvz )
+
+(
+	cd nginx-${NGINX_VERSION}
+	./configure \
+		--with-pcre=pcre-${PCRE_VERSION} \
+		--prefix=/tmp/nginx \
+		--with-http_{auth_request,ssl}_module \
+		--add-module=set-misc-nginx-module-${SET_MISC_VERSION}
+
+	make install
+)
+
 mkdir -p $build_dir/config
 cp $bp_dir/scripts/config/templates/mime.types $build_dir/config
 
