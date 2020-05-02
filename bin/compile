@@ -65,6 +65,13 @@ echo "Downloading $mruby_module_url"
 (cd nginx-${NGINX_VERSION} && curl -L $mruby_module_url | tar xvz )
 
 (
+    cd nginx-${NGINX_VERSION}/ngx_mruby-${MRUBY_VERSION}
+    ./configure --with-ngx-src=root=..
+    make build_mruby
+    make generate_gems_config
+)
+
+(
   cd nginx-${NGINX_VERSION}
   ./configure \
     --with-pcre=pcre-${PCRE_VERSION} \
