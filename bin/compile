@@ -23,6 +23,7 @@ ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
 NGX_DEVEL_KIT_VERSION=${NGX_DEVEL_KIT_VERSION-0.3.0}
 SET_MISC_MODULE_VERSION=${SET_MISC_MODULE_VERSION-0.32}
 HEADERS_MORE_MODULE_VERSION=${HEADERS_MORE_MODULE_VERSION-0.33}
+MRUBY_VERSION=${MRUBY_VERSION-2.2.1}
 
 nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 pcre_tarball_url=https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz
@@ -30,6 +31,7 @@ zlib_url=http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 ngx_devel_kit_url=https://github.com/simplresty/ngx_devel_kit/archive/v${NGX_DEVEL_KIT_VERSION}.tar.gz
 set_misc_module_url=https://github.com/openresty/set-misc-nginx-module/archive/v${SET_MISC_MODULE_VERSION}.tar.gz
 headers_more_module_url=https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_MODULE_VERSION}.tar.gz
+mruby_module_url=https://github.com/matsumotory/ngx_mruby/archive/v${MRUBY_VERSION}.tar.gz
 
 # temp_dir=$(mktemp -d /tmp/nginx.XXXXXXXXXX)
 
@@ -59,6 +61,9 @@ echo "Downloading $set_misc_module_url"
 echo "Downloading $headers_more_module_url"
 (cd nginx-${NGINX_VERSION} && curl -L $headers_more_module_url | tar xvz )
 
+echo "Downloading $mruby_module_url"
+(cd nginx-${NGINX_VERSION} && curl -L $mruby_module_url | tar xvz )
+
 (
   cd nginx-${NGINX_VERSION}
   ./configure \
@@ -75,6 +80,7 @@ echo "Downloading $headers_more_module_url"
     --add-module=./ngx_devel_kit-${NGX_DEVEL_KIT_VERSION} \
     --add-module=./set-misc-nginx-module-${SET_MISC_MODULE_VERSION} \
     --add-module=./headers-more-nginx-module-${HEADERS_MORE_MODULE_VERSION} \
+    --add-module=./ngx_mruby-${MRUBY_VERSION} \
     --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
     --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,--as-needed'
   make install
