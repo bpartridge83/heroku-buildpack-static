@@ -31,12 +31,15 @@ ngx_devel_kit_url=https://github.com/simplresty/ngx_devel_kit/archive/v${NGX_DEV
 set_misc_module_url=https://github.com/openresty/set-misc-nginx-module/archive/v${SET_MISC_MODULE_VERSION}.tar.gz
 headers_more_module_url=https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_MODULE_VERSION}.tar.gz
 
-temp_dir=$(mktemp -d /tmp/nginx.XXXXXXXXXX)
+# temp_dir=$(mktemp -d /tmp/nginx.XXXXXXXXXX)
 
-cd /tmp
+# cd /tmp
 
-cd $temp_dir
-echo "Temp dir: $temp_dir"
+mkdir -p $build_dir/bin
+cd $build_dir/bin
+
+# cd $temp_dir
+# echo "Temp dir: $temp_dir"
 
 echo "Downloading $nginx_tarball_url"
 curl -L $nginx_tarball_url | tar xzv
@@ -77,7 +80,8 @@ echo "Downloading $headers_more_module_url"
   make install
 )
 
-mkdir -p $build_dir/bin
+pwd
+ls -la
 
 mv nginx-${NGINX_VERSION} $build_dir/bin/
 
