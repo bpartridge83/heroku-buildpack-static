@@ -80,7 +80,7 @@ echo "Downloading $headers_more_module_url"
   make install
 )
 
-ln -s /tmp/nginx/sbin/nginx $build_dir/bin/nginx
+mv /tmp/nginx/sbin/nginx $build_dir/bin/
 
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
 
