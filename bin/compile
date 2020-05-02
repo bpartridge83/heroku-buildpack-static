@@ -67,7 +67,7 @@ echo "Downloading $mruby_module_url"
 (
     pwd
     cd nginx-${NGINX_VERSION}/ngx_mruby-${MRUBY_VERSION}
-    ./configure --with-ngx-src=root=${build_dir}/bin/nginx-${NGINX_VERSION}
+    ./configure --with-ngx-src-root=${build_dir}/bin/nginx-${NGINX_VERSION}
     make build_mruby
     make generate_gems_config
 )
