@@ -12,6 +12,11 @@
 
 set -e
 
+build_dir=$1
+cache_dir=$2
+env_dir=$3
+bp_dir=$(dirname $(dirname $0))
+
 NGINX_VERSION=${NGINX_VERSION-1.17.10}
 PCRE_VERSION=${PCRE_VERSION-8.44}
 ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
