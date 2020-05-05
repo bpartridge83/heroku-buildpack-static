@@ -69,6 +69,8 @@ fi
 
 mv $build $build_dir
 
+cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
+
 # Add to PATH
 mkdir -p $build_dir/.profile.d
 echo 'PATH=$PATH:$HOME/nginx/sbin' > $build_dir/.profile.d/nginx_path.sh
