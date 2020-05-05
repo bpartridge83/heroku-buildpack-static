@@ -69,6 +69,7 @@ fi
 
 mv $build $build_dir
 
+mkdir -p $build_dir/bin
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
 
 # Add to PATH
