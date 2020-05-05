@@ -8,26 +8,26 @@ cache_dir=$2
 env_dir=$3
 bp_dir=$(dirname $(dirname $0))
 
-fetch_nginx_tarball() {
-    local version="1.9.7"
-    local tarball_file="nginx-$version.tgz"
-    local stack="heroku-18"
-    # local nginx_tarball_url="https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/nginx/$stack/nginx-$version-ngx_mruby.tgz"
-    local nginx_url="https://github.com/heroku/heroku-buildpack-nginx/blob/master/bin/nginx-heroku-18?raw=true"
-    local dest_path="$cache_dir/$stack/$tarball_file"
+# fetch_nginx_tarball() {
+#     local version="1.9.7"
+#     local tarball_file="nginx-$version.tgz"
+#     local stack="heroku-18"
+#     # local nginx_tarball_url="https://s3-external-1.amazonaws.com/heroku-buildpack-ruby/nginx/$stack/nginx-$version-ngx_mruby.tgz"
+#     local nginx_url="https://github.com/heroku/heroku-buildpack-nginx/blob/master/bin/nginx-heroku-18?raw=true"
+#     local dest_path="$cache_dir/$stack/$tarball_file"
 
-    if [ -f "$dest_path" ]; then
-        echo -n "cat $dest_path"
-    else
-        # echo -n "curl -L $nginx_tarball_url"
-        echo -n "curl -L $nginx_url"
-    fi
-}
+#     if [ -f "$dest_path" ]; then
+#         echo -n "cat $dest_path"
+#     else
+#         # echo -n "curl -L $nginx_tarball_url"
+#         curl -o -L $nginx_url
+#     fi
+# }
 
 mkdir -p $build_dir/bin
-$(fetch_nginx_tarball)
-mv nginx-heroku-18 $build_dir/bin/
-nginx_version=$($build_dir/bin/nginx-heroku-18 -V 2>&1 | head -1 | awk '{ print $NF }')
+curl -o $build_dir/bin/nginx -L "https://github.com/heroku/heroku-buildpack-nginx/blob/master/bin/nginx-heroku-18?raw=true"
+
+nginx_version=$($build_dir/bin/nginx -V 2>&1 | head -1 | awk '{ print $NF }')
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
 echo "-----> Installed ${nginx_version} to /app/bin"
 
