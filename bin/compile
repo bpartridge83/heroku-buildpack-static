@@ -47,10 +47,11 @@ else
   popd
 
   status "Compiling MRuby"
-  cp ./mruby_build_config.rb $mruby_src/build_config.rb
+#   cp ./mruby_build_config.rb $mruby_src/build_config.rb
   pushd ${mruby_src}
-  ./configure --with-ngx-src-root=${src}
-  make build_mruby
+  env NGINX_CONFIG_OPT_ENV='--prefix=${src}' sh ./build.sh
+#   ./configure --with-ngx-src-root=${src}
+#   make build_mruby
   popd
 
   status "Compiling nginx"
