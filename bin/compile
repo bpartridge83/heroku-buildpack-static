@@ -69,9 +69,10 @@ mkdir -p $build
 
 mv $build $build_dir
 
-mv $build_dir/nginx/sbin/nginx $build_dir/bin
+mkdir -p $build_dir/bin
 
-# mkdir -p $build_dir/bin
+mv $build_dir/nginx/sbin/nginx $build_dir/bin/
+
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
 
 # Add to PATH
