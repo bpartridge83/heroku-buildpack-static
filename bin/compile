@@ -20,12 +20,14 @@ MRUBY_VERSION=v2.2.1
 # Download URLs
 nginx_tarball_url=http://nginx.org/download/nginx-1.15.6.tar.gz
 mruby_github_url=https://github.com/matsumoto-r/ngx_mruby
+set_misc_github_url=https://github.com/openresty/set-misc-nginx-module
 
 # Build paths
 cache=$cache_dir/build/nginx-with-mruby/${NGINX_VERSION}-mruby-${MRUBY_VERSION}
 build=${BUILD_PREFIX}/app/nginx
 src=${PWD}/nginx-${NGINX_VERSION}
 mruby_src=${PWD}/ngx_mruby
+misc_src=${PWD}/set-misc-nginx-module
 
 mkdir -p $build
 
@@ -48,16 +50,23 @@ mkdir -p $build
   popd
 
   status "Compiling MRuby"
-#   cp ./mruby_build_config.rb $mruby_src/build_config.rb
   pushd ${mruby_src}
   env NGINX_CONFIG_OPT_ENV='--prefix=${src}' sh ./build.sh
-#   ./configure --with-ngx-src-root=${src}
-#   make build_mruby
+  popd
+
+  status "Downloading set_misc ${MRUBY_VERSION}"
+  if [ -d "$misc_src" ]; then
+    rm -rf ${misc_src}
+  fi
+
+  git clone $set_misc_github_url
+  pushd ${misc_src}
+  git checkout master
   popd
 
   status "Compiling nginx"
   pushd $src
-  ./configure --prefix=$build --with-ipv6 --with-http_stub_status_module --with-http_realip_module --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit $NGINX_OPTIONS
+  ./configure --prefix=$build --with-ipv6 --with-http_stub_status_module --with-http_realip_module --with-compat --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit --add-module=${misc_src} $NGINX_OPTIONS
   make install --silent
 
   # Clear out cache if our version doesn't exist
