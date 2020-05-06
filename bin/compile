@@ -60,11 +60,10 @@ mkdir -p $build
   ./configure --prefix=$build --with-ipv6 --with-http_stub_status_module --with-http_realip_module --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit $NGINX_OPTIONS
   make install --silent
 
+  echo $build
+
   ls -la $build
   ls -la $build/sbin
-
-  ls -la $build_dir
-  ls -la $build_dir/sbin
 
   # Clear out cache if our version doesn't exist
   status "Caching build"
@@ -75,8 +74,12 @@ mkdir -p $build
 
 mv $build $build_dir
 
+echo 'Attempting to check $build_dir'
+
+echo $build_dir
+
 ls -la $build_dir
-ls -la $build_dir/sbin
+# ls -la $build_dir/sbin
 
 cp $build_dir/sbin/nginx $build_dir/bin
 
