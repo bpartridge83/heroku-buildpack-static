@@ -18,7 +18,7 @@ NGINX_VERSION=1.15.6
 MRUBY_VERSION=v2.2.1
 
 # Download URLs
-nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
+nginx_tarball_url=http://nginx.org/download/nginx-1.15.6.tar.gz
 mruby_github_url=https://github.com/matsumoto-r/ngx_mruby
 
 # Build paths
@@ -28,14 +28,15 @@ src=${PWD}/nginx-${NGINX_VERSION}
 mruby_src=${PWD}/ngx_mruby
 
 mkdir -p $build
+mkdir -p $build/bin
 
-if [ -e $cache ]; then
-# Use cached nginx
-  status "Using previously compiled nginx-$NGINX_VERSION"
-  cp -R $cache/nginx/* $build
-else
+# if [ -e $cache ]; then
+# # Use cached nginx
+#   status "Using previously compiled nginx-$NGINX_VERSION"
+#   cp -R $cache/nginx/* $build
+# else
   status "Downloading $nginx_tarball_url"
-  curl -L $nginx_tarball_url | tar xz
+  curl -L http://nginx.org/download/nginx-1.15.6.tar.gz | tar xz
 
   status "Downloading MRuby ${MRUBY_VERSION}"
   if [ -d "$mruby_src" ]; then
@@ -57,7 +58,7 @@ else
 
   status "Compiling nginx"
   pushd $src
-  ./configure --prefix=$build --with-ipv6 --with-http_stub_status_module --with-http_realip_module --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit $NGINX_OPTIONS
+  ./configure --prefix=$build --sbin-path=$build/bin --with-ipv6 --with-http_stub_status_module --with-http_realip_module --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit $NGINX_OPTIONS
   make install --silent
 
   # Clear out cache if our version doesn't exist
@@ -65,11 +66,11 @@ else
   rm -rf $cache_dir/*
   mkdir -p $cache
   cp -R $build $cache
-fi
+# fi
 
 mv $build $build_dir
 
-mkdir -p $build_dir/bin
+# mkdir -p $build_dir/bin
 cp -a $bp_dir/scripts/{boot,config} -t $build_dir/bin/
 
 # Add to PATH
