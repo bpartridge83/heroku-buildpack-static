@@ -66,7 +66,7 @@ mkdir -p $build
 
   status "Compiling nginx"
   pushd $src
-  ./configure --prefix=$build --with-ipv6 --with-http_stub_status_module --with-http_realip_module --with-compat --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit --add-module=${misc_src} $NGINX_OPTIONS
+  ./configure --prefix=$build --with-ipv6 --with-http_stub_status_module --with-http_sub_module --with-http_realip_module --with-compat --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit --add-module=${misc_src} $NGINX_OPTIONS
   make install --silent
 
   # Clear out cache if our version doesn't exist
