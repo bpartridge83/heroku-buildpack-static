@@ -28,7 +28,6 @@ src=${PWD}/nginx-${NGINX_VERSION}
 mruby_src=${PWD}/ngx_mruby
 
 mkdir -p $build
-mkdir -p $build/bin
 
 # if [ -e $cache ]; then
 # # Use cached nginx
@@ -58,6 +57,7 @@ mkdir -p $build/bin
 
   status "Compiling nginx"
   pushd $src
+  mkdir -p $build/bin
   ./configure --prefix=$build --sbin-path=$build/bin --with-ipv6 --with-http_stub_status_module --with-http_realip_module --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit $NGINX_OPTIONS
   make install --silent
 
