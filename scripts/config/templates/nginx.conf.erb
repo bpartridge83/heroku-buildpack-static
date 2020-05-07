@@ -68,10 +68,10 @@ http {
 
     # mruby_post_read_handler /app/bin/config/lib/ngx_mruby/headers.rb cache;
 
-    mruby_post_read_handler_code '
+    mruby_post_read_handler_code "
       eval(File.read('/app/bin/config/lib/nginx_config_util.rb'))
 
-      USER_CONFIG = "/app/static.json"
+      USER_CONFIG = '/app/static.json'
 
       config = {}
       config = JSON.parse(File.read(USER_CONFIG)) if File.exist?(USER_CONFIG)
@@ -82,9 +82,9 @@ http {
       nonce = r.nonce
       nonceKey = r.nonceKey
 
-      if config["headers"]
-        config["headers"].to_a.reverse.each do |route, header_hash|
-          if Regexp.compile("^#{NginxConfigUtil.to_regex(route)}$") =~ uri
+      if config['headers']
+        config['headers'].to_a.reverse.each do |route, header_hash|
+          if Regexp.compile('^#{NginxConfigUtil.to_regex(route)}$') =~ uri
             header_hash.each do |key, value|
               # value must be a string
               req.headers_out[key] = value.to_s.gsub('**TEST**', nonce)
@@ -93,7 +93,7 @@ http {
           end
         end
       end
-    ';
+    ";
 
     location / {
     <% if ENV['CSP_NONCE_ID'] %>
