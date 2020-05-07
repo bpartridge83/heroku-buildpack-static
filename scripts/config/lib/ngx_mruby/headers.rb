@@ -17,7 +17,7 @@ if config["headers"]
     if Regexp.compile("^#{NginxConfigUtil.to_regex(route)}$") =~ uri
       header_hash.each do |key, value|
         # value must be a string
-        req.headers_out[key] = value.to_s.gsub(nonceKey, nonce)
+        req.headers_out[key] = value.to_s.gsub('**TEST**', nonce)
       end
       break
     end
