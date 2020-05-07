@@ -58,10 +58,12 @@ http {
 
   <% if ENV['CSP_NONCE_ID'] %>
     set_secure_random_alphanum $cspNonce 32;
-    set $nonce $cspNonce;
     sub_filter_once off;
     sub_filter_types *;
     sub_filter '<%= ENV['CSP_NONCE_ID'] %>' '$cspNonce';
+
+    set $nonce = '$cspNonce';
+    set $nonceKey = '<%= ENV['CSP_NONCE_ID'] %>';
   <% end %>
 
     mruby_post_read_handler /app/bin/config/lib/ngx_mruby/headers.rb cache;
