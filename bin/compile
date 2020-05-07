@@ -31,11 +31,11 @@ misc_src=${PWD}/set-misc-nginx-module
 
 mkdir -p $build
 
-if [ -e $cache ]; then
-# Use cached nginx
-  status "Using previously compiled nginx-$NGINX_VERSION"
-  cp -R $cache/nginx/* $build
-else
+# if [ -e $cache ]; then
+# # Use cached nginx
+#   status "Using previously compiled nginx-$NGINX_VERSION"
+#   cp -R $cache/nginx/* $build
+# else
   status "Downloading $nginx_tarball_url"
   curl -L http://nginx.org/download/nginx-1.15.6.tar.gz | tar xz
 
@@ -74,7 +74,7 @@ else
   rm -rf $cache_dir/*
   mkdir -p $cache
   cp -R $build $cache
-fi
+# fi
 
 mv $build $build_dir
 

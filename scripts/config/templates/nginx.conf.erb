@@ -9,6 +9,7 @@ events {
 
 http {
   gzip on;
+  gzip_disable "msie6";
   gzip_comp_level 6;
   gzip_min_length 512;
   gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
@@ -57,6 +58,7 @@ http {
 
   <% if ENV['CSP_NONCE_ID'] %>
     set_secure_random_alphanum $cspNonce 32;
+    set $nonce $cspNonce;
     sub_filter_once off;
     sub_filter_types *;
     sub_filter '<%= ENV['CSP_NONCE_ID'] %>' '$cspNonce';
