@@ -23,3 +23,5 @@ if config["headers"]
     end
   end
 end
+
+req.headers_out[nonceKey] = nonce
