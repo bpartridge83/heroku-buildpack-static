@@ -21,6 +21,7 @@ MRUBY_VERSION=v2.2.1
 nginx_tarball_url=http://nginx.org/download/nginx-1.15.6.tar.gz
 mruby_github_url=https://github.com/matsumoto-r/ngx_mruby
 set_misc_github_url=https://github.com/openresty/set-misc-nginx-module
+headers_more_github_url=https://github.com/openresty/headers-more-nginx-module
 
 # Build paths
 cache=$cache_dir/build/nginx-with-mruby/${NGINX_VERSION}-mruby-${MRUBY_VERSION}
@@ -28,14 +29,15 @@ build=${BUILD_PREFIX}/app/nginx
 src=${PWD}/nginx-${NGINX_VERSION}
 mruby_src=${PWD}/ngx_mruby
 misc_src=${PWD}/set-misc-nginx-module
+headers_src=${PWD}/headers-more-nginx-module
 
 mkdir -p $build
 
-if [ -e $cache ]; then
-# Use cached nginx
-  status "Using previously compiled nginx-$NGINX_VERSION"
-  cp -R $cache/nginx/* $build
-else
+# if [ -e $cache ]; then
+# # Use cached nginx
+#   status "Using previously compiled nginx-$NGINX_VERSION"
+#   cp -R $cache/nginx/* $build
+# else
   status "Downloading $nginx_tarball_url"
   curl -L http://nginx.org/download/nginx-1.15.6.tar.gz | tar xz
 
@@ -54,7 +56,7 @@ else
   env NGINX_CONFIG_OPT_ENV='--prefix=${src}' sh ./build.sh
   popd
 
-  status "Downloading set_misc ${MRUBY_VERSION}"
+  status "Downloading set_misc"
   if [ -d "$misc_src" ]; then
     rm -rf ${misc_src}
   fi
@@ -64,9 +66,19 @@ else
   git checkout master
   popd
 
+  status "Downloading headers_more"
+  if [ -d "$headers_src" ]; then
+    rm -rf ${headers_src}
+  fi
+
+  git clone $headers_more_github_url
+  pushd ${headers_src}
+  git checkout master
+  popd
+
   status "Compiling nginx"
   pushd $src
-  ./configure --prefix=$build --with-ipv6 --with-http_stub_status_module --with-http_sub_module --with-http_realip_module --with-compat --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit --add-module=${misc_src} $NGINX_OPTIONS
+  ./configure --prefix=$build --with-ipv6 --with-http_stub_status_module --with-http_sub_module --with-http_realip_module --with-compat --with-http_ssl_module --add-module=${mruby_src} --add-module=${mruby_src}/dependence/ngx_devel_kit --add-module=${misc_src} --add-module=${headers_src} $NGINX_OPTIONS
   make install --silent
 
   # Clear out cache if our version doesn't exist
@@ -74,7 +86,7 @@ else
   rm -rf $cache_dir/*
   mkdir -p $cache
   cp -R $build $cache
-fi
+# fi
 
 mv $build $build_dir
 
