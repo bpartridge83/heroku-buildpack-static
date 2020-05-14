@@ -8,16 +8,12 @@ config = JSON.parse(File.read(USER_CONFIG)) if File.exist?(USER_CONFIG)
 req    = Nginx::Request.new
 uri    = req.var.uri
 
-r = Nginx::Request.new.var
-nonce = r.nonce
-nonceKey = r.nonceKey
-
 if config["headers"]
   config["headers"].to_a.reverse.each do |route, header_hash|
     if Regexp.compile("^#{NginxConfigUtil.to_regex(route)}$") =~ uri
       header_hash.each do |key, value|
         # value must be a string
-        req.headers_out[key] = value.to_s.gsub('**TEST**', nonce)
+        req.headers_out[key] = value.to_s.gsub('**TEST**', '__test__')
       end
       break
     end
