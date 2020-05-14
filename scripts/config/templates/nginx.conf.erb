@@ -9,6 +9,7 @@ events {
 
 http {
   gzip on;
+  gzip_disable "msie6";
   gzip_comp_level 6;
   gzip_min_length 512;
   gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
@@ -54,9 +55,25 @@ http {
     auth_basic "Restricted";
     auth_basic_user_file <%= basic_auth_htpasswd_path %>;
   <% end %>
+
+  <% if ENV['CSP_NONCE_ID'] %>
+    set_secure_random_alphanum $cspNonce 32;
+    sub_filter_once off;
+    sub_filter_types *;
+    sub_filter '<%= ENV['CSP_NONCE_ID'] %>' '$cspNonce';
+
+    set $nonceKey '<%= ENV['CSP_NONCE_ID'] %>';
+    set $nonce '$cspNonce';
+  <% end %>
+
     mruby_post_read_handler /app/bin/config/lib/ngx_mruby/headers.rb cache;
 
     location / {
+    <% if ENV['CSP_NONCE_ID'] %>
+      proxy_set_header Accept-Encoding "";
+      add_header X-Nonce $cspNonce;
+    <% end %>
+
       mruby_set $fallback /app/bin/config/lib/ngx_mruby/routes_fallback.rb cache;
     <% if clean_urls %>
       try_files $uri.html $uri $uri/ $fallback;
