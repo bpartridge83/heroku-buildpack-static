@@ -62,6 +62,7 @@ http {
     sub_filter_types *;
     sub_filter '<%= ENV['CSP_NONCE_ID'] %>' '$cspNonce';
     sub_filter '<script' '<script nonce=\'$cspNonce\'';
+    sub_filter 'f.parentNode' 'var n=d.querySelector('[nonce]');n&&j.setAttribute('nonce',n.nonce||n.getAttribute('nonce'));f.parentNode';
 
     set $nonceKey '<%= ENV['CSP_NONCE_ID'] %>';
     set $nonce '$cspNonce';
