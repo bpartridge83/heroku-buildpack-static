@@ -41,7 +41,7 @@ http {
   server {
     listen <%= port %> reuseport;
     charset <%= encoding %>;
-    port_in_redirect off;
+    port_in_redirect off;3
     keepalive_timeout 5;
     root <%= root %>;
   <% if error_page %>
@@ -76,7 +76,7 @@ http {
       add_header X-Nonce $cspNonce;
     <% end %>
 
-      more_set_headers "Content-Security-Policy: base-uri 'self'; default-src 'none'; script-src 'self' www.googletagmanager.com 'nonce-$nonce'; style-src 'self' 'unsafe-inline' cloud.typography.com d3hjue7omxs01q.cloudfront.net; object-src 'none'; form-action 'self'; font-src 'self' data:; connect-src 'self'; img-src 'self' data: 'nonce-$nonce'; manifest-src 'self'";
+      more_set_headers "Content-Security-Policy: base-uri 'self'; default-src 'none'; script-src 'self' www.googletagmanager.com www.google-analytics.com ssl.google-analytics.com 'nonce-**TEST**'; style-src 'self' 'unsafe-inline' cloud.typography.com d3hjue7omxs01q.cloudfront.net; object-src 'none'; form-action 'self'; font-src 'self' data:; connect-src www.google-analytics.com; img-src 'self' data: www.google-analytics.com; manifest-src 'self';";
 
       mruby_set $fallback /app/bin/config/lib/ngx_mruby/routes_fallback.rb cache;
     <% if clean_urls %>
