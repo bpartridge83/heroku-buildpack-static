@@ -76,7 +76,7 @@ http {
       add_header X-Nonce $cspNonce;
     <% end %>
 
-      more_set_headers "Content-Security-Policy: base-uri 'self'; default-src 'none'; script-src 'self' www.googletagmanager.com www.google-analytics.com ssl.google-analytics.com https://cdnjs.cloudflare.com/ajax/libs/rollbar.js/2.14.4/rollbar.min.js 'nonce-$nonce'; style-src 'self' 'unsafe-inline' cloud.typography.com d3hjue7omxs01q.cloudfront.net; object-src 'none'; form-action 'self'; font-src 'self' data:; connect-src 'self' www.google-analytics.com; img-src 'self' data: www.google-analytics.com; manifest-src 'self';";
+      more_set_headers "Content-Security-Policy: base-uri 'self'; default-src 'none'; script-src 'self' www.googletagmanager.com www.google-analytics.com ssl.google-analytics.com https://cdnjs.cloudflare.com/ajax/libs/rollbar.js/2.14.4/rollbar.min.js 'nonce-$nonce'; style-src 'self' 'unsafe-inline' cloud.typography.com d3hjue7omxs01q.cloudfront.net; object-src 'none'; form-action 'self'; font-src 'self' data:; connect-src 'self' www.google-analytics.com api.rollbar.com; img-src 'self' data: www.google-analytics.com; manifest-src 'self';";
 
       mruby_set $fallback /app/bin/config/lib/ngx_mruby/routes_fallback.rb cache;
     <% if clean_urls %>
